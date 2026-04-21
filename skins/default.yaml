@@ -1,0 +1,29 @@
+name: default
+description: "Claude Code default — clean, neutral, no frills"
+
+terminal:
+  background: ""
+  foreground: ""
+  cursor: ""
+  palette: {}
+
+statusline:
+  accent: "#FFBF00"
+  dim: "#666666"
+  bar_fill: "#FFBF00"
+  bar_empty: "#333333"
+  icon: ">"
+
+branding:
+  banner: ""
+  welcome: ""
+  goodbye: ""
+  prompt_prefix: ""
+
+personality:
+  voice: ""
+
+tools:
+  sounds: false
+  prefix: ""
+  events: {}

@@ -1,0 +1,58 @@
+# Claude Skin Template
+# Copy this file to skins/<name>.yaml
+# Rename 'myskin' below to match your filename
+# Delete any keys you don't want to customize (they'll inherit from default)
+
+name: myskin
+description: My custom Claude Code theme
+
+terminal:
+  background: "#1a1a2e"
+  foreground: "#e0e0e0"
+  cursor: "#ff6b35"
+  palette:
+    black: "#1a1a2e"
+    red: "#ef5350"
+    green: "#4caf50"
+    yellow: "#ffbf00"
+    blue: "#42a5f5"
+    magenta: "#ce93d8"
+    cyan: "#4dd0e1"
+    white: "#e0e0e0"
+
+statusline:
+  accent: "#ffbf00"
+  dim: "#666666"
+  bar_fill: "#ffbf00"
+  bar_empty: "#333333"
+  icon: ">"
+
+branding:
+  banner: |
+    \033[38;2;255;191;0m██╗   ██╗██╗   ██╗    ███████╗██╗  ██╗██╗███╗   ██╗\033[0m
+    \033[38;2;255;191;0m███╗ ███║╚██╗ ██╔╝    ██╔════╝██║ ██╔╝██║████╗  ██║\033[0m
+    \033[38;2;255;191;0m██╔████╔██║ ╚████╔╝     ███████╗█████╔╝ ██║██╔██╗ ██║\033[0m
+    \033[38;2;255;191;0m██║╚██╔╝██║  ╚██╔╝      ╚════██║██╔═██╗ ██║██║╚██╗██║\033[0m
+    \033[38;2;255;191;0m██║ ╚═╝ ██║   ██║       ███████║██║  ██╗██║██║ ╚████║\033[0m
+    \033[38;2;255;191;0m╚═╝     ╚═╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝\033[0m
+    \033[38;2;102;102;102m                    ◆ C L A U D E ◆\033[0m
+  welcome: "Welcome! Type your message or /help for commands."
+  goodbye: "See you later!"
+  prompt_prefix: ">"
+  # hero: |
+  #   Optional braille art displayed above the banner.
+  #   Use \033[38;2;R;G;Bm for colors, \033[0m to reset.
+
+# Personality — create a matching personalities/<name>.md file
+# personality:
+#   voice: |
+#     Instructions for Claude's tone and style...
+
+tools:
+  sounds: false
+  prefix: "┊"
+  # events:
+  #   file_written: { sound: "Tink", icon: "◆" }
+  #   command_run: { sound: "Pop", icon: "⚡" }
+  #   error: { sound: "Basso", icon: "⚠" }
+  #   search: { sound: "Tink", icon: "◈" }
