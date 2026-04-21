@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Skins — Visual Themes for Claude Code</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    }
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #FF6B35, #6A0DAD, #00E5FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.2em;
+      color: #8b949e;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .hero .demo-gif {
+      max-width: 800px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    .install {
+      text-align: center;
+      padding: 40px 20px;
+      background: #161b22;
+      border-top: 1px solid #30363d;
+      border-bottom: 1px solid #30363d;
+    }
+    .install code {
+      display: inline-block;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 16px 32px;
+      font-size: 1.1em;
+      font-family: "SF Mono", "Fira Code", monospace;
+      color: #79c0ff;
+      margin: 10px 0;
+    }
+    .install p {
+      color: #8b949e;
+      margin-bottom: 16px;
+    }
+
+    .skins {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    .skins h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 40px;
+    }
+    .skin-card {
+      margin-bottom: 60px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+      background: #161b22;
+    }
+    .skin-card img {
+      width: 100%;
+      display: block;
+    }
+    .skin-info {
+      padding: 24px;
+    }
+    .skin-info h3 {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+    }
+    .skin-info p {
+      color: #8b949e;
+    }
+    .skin-info .tag {
+      display: inline-block;
+      font-size: 0.8em;
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-right: 8px;
+      margin-top: 12px;
+    }
+
+    .nebula-tag { background: rgba(106,13,173,0.3); color: #B388FF; border: 1px solid #6A0DAD; }
+    .mythos-tag { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid #B8860B; }
+    .netrunner-tag { background: rgba(0,229,255,0.15); color: #00E5FF; border: 1px solid #004D40; }
+
+    .features {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+    .features h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .feature {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .feature h4 {
+      margin-bottom: 6px;
+    }
+    .feature p {
+      color: #8b949e;
+      font-size: 0.9em;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid #30363d;
+      color: #484f58;
+      font-size: 0.9em;
+    }
+    .footer a { color: #58a6ff; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>Claude Skins</h1>
+    <p>Custom visual themes for Claude Code CLI. Terminal colors, ASCII art banners, themed status lines, personality voices, and tool sounds.</p>
+    <img class="demo-gif" src="demo.gif" alt="Claude Skins Demo cycling through nebula, mythos, and netrunner themes">
+  </div>
+
+  <div class="install">
+    <p>Get started in seconds</p>
+    <code>git clone https://github.com/basicScandal/claude-skins.git && cd claude-skins && ./install.sh</code>
+    <p style="margin-top: 16px;">Then in Claude Code: <code style="padding: 4px 12px; font-size: 1em;">/skin nebula</code></p>
+  </div>
+
+  <div class="skins">
+    <h2>Available Skins</h2>
+
+    <div class="skin-card">
+      <img src="nebula.png" alt="Nebula skin — purple to orange gradient with targeting reticle braille art">
+      <div class="skin-info">
+        <h3>Nebula</h3>
+        <p>Offensive security scanner. Purple-to-orange gradient, targeting reticle braille art, tactical precision voice.</p>
+        <span class="tag nebula-tag">purple/orange</span>
+        <span class="tag nebula-tag">offsec</span>
+        <span class="tag nebula-tag">tactical</span>
+      </div>
+    </div>
+
+    <div class="skin-card">
+      <img src="mythos.png" alt="Mythos skin — blue and gold with Eye of Providence braille art">
+      <div class="skin-info">
+        <h3>Mythos</h3>
+        <p>AGI awakening meets Greek mythology. Eye of Providence braille art, divine blue and gold palette, oracular voice.</p>
+        <span class="tag mythos-tag">blue/gold</span>
+        <span class="tag mythos-tag">mythology</span>
+        <span class="tag mythos-tag">oracular</span>
+      </div>
+    </div>
+
+    <div class="skin-card">
+      <img src="netrunner.png" alt="Netrunner skin — cyan on black with skull and neural connections braille art">
+      <div class="skin-info">
+        <h3>Netrunner</h3>
+        <p>Cyberpunk neural interface hacker. Skull braille art with neural cables, ICE-breaking cyan on black, terse hacker argot.</p>
+        <span class="tag netrunner-tag">cyan/black</span>
+        <span class="tag netrunner-tag">cyberpunk</span>
+        <span class="tag netrunner-tag">hacker</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <h2>What a Skin Changes</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h4>Terminal Colors</h4>
+        <p>Background, foreground, cursor, and full ANSI palette via OSC escape sequences</p>
+      </div>
+      <div class="feature">
+        <h4>ASCII Banner</h4>
+        <p>Braille art + block letter logo displayed every time Claude starts</p>
+      </div>
+      <div class="feature">
+        <h4>Status Line</h4>
+        <p>Themed colors, icon, and progress bar in the Claude Code status bar</p>
+      </div>
+      <div class="feature">
+        <h4>Personality</h4>
+        <p>Output style that shapes Claude's voice — oracular, hacker, or tactical</p>
+      </div>
+      <div class="feature">
+        <h4>Tool Sounds</h4>
+        <p>macOS system sounds on file writes, commands, searches, and errors</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>
+      MIT License &middot;
+      <a href="https://github.com/basicScandal/claude-skins">GitHub</a> &middot;
+      Inspired by <a href="https://github.com/joeynyc/hermes-skins">hermes-skins</a>
+    </p>
+  </div>
+
+</body>
+</html>
