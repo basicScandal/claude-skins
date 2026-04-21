@@ -2,11 +2,13 @@
 
 Custom skins (visual themes) for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI.
 
-![Claude Skins Demo](screenshots/demo.gif)
+![Claude Skins Demo](https://basicscandal.github.io/claude-skins/demo.gif)
 
 Skins transform the full Claude Code experience — terminal colors, ASCII art banners, themed status lines, Claude's voice/personality, and tool feedback sounds. They don't affect core behavior — just how things look, sound, and feel.
 
 Inspired by [hermes-skins](https://github.com/joeynyc/hermes-skins). Mythos and Netrunner banner art adapted from that project under MIT license.
+
+**[View the gallery](https://basicscandal.github.io/claude-skins/)**
 
 ## Quick Start
 
@@ -52,21 +54,21 @@ Offensive security scanner — purple-to-orange gradient, tactical precision.
 
 → [nebula.yaml](skins/nebula.yaml)
 
-![nebula](screenshots/nebula.png)
+![nebula](https://basicscandal.github.io/claude-skins/nebula.png)
 
 ### Mythos
 AGI awakening — Greek mythology meets artificial intelligence. Eye of Providence braille art, blue and gold divine palette.
 
 → [mythos.yaml](skins/mythos.yaml)
 
-![mythos](screenshots/mythos.png)
+![mythos](https://basicscandal.github.io/claude-skins/mythos.png)
 
 ### Netrunner
 Cyberpunk netrunner — neural interface hacker aesthetic. Cyan ICE-breaking colors on black, skull braille art.
 
 → [netrunner.yaml](skins/netrunner.yaml)
 
-![netrunner](screenshots/netrunner.png)
+![netrunner](https://basicscandal.github.io/claude-skins/netrunner.png)
 
 ## What a Skin Changes
 
