@@ -50,15 +50,21 @@ Offensive security scanner — purple-to-orange gradient, tactical precision.
 
 → [nebula.yaml](skins/nebula.yaml)
 
+![nebula](screenshots/nebula.svg)
+
 ### Mythos
 AGI awakening — Greek mythology meets artificial intelligence. Eye of Providence braille art, blue and gold divine palette.
 
 → [mythos.yaml](skins/mythos.yaml)
 
+![mythos](screenshots/mythos.svg)
+
 ### Netrunner
 Cyberpunk netrunner — neural interface hacker aesthetic. Cyan ICE-breaking colors on black, skull braille art.
 
 → [netrunner.yaml](skins/netrunner.yaml)
+
+![netrunner](screenshots/netrunner.svg)
 
 ## What a Skin Changes
 
