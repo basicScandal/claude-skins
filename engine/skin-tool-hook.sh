@@ -6,6 +6,10 @@
 ENGINE_DIR="$HOME/.claude/skins/engine"
 SKINS_DIR="$HOME/.claude/skins"
 
+# Load cross-platform sound abstraction (defines play_sound())
+# shellcheck source=engine/play-sound.sh
+source "$ENGINE_DIR/play-sound.sh" 2>/dev/null || true
+
 # Read hook input
 input=$(cat)
 
@@ -83,10 +87,9 @@ evt = events.get('$event', {})
 print(evt.get('sound', ''))
 " 2>/dev/null || echo "")
 
-# Play sound (async, non-blocking)
-if [[ -n "$sound" && -f "/System/Library/Sounds/${sound}.aiff" ]]; then
-  afplay "/System/Library/Sounds/${sound}.aiff" &>/dev/null &
-  disown
+# Play sound (async, non-blocking, cross-platform)
+if [[ -n "$sound" ]]; then
+  play_sound "$sound"
 fi
 
 exit 0
