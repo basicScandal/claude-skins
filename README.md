@@ -105,6 +105,13 @@ The anti-skin — pure monochrome, zero decoration, no sounds, maximum terseness
 
 ![brutalist](https://basicscandal.github.io/claude-skins/brutalist.gif)
 
+### Grimoire
+Dark academia spellbook — deep brown parchment, golden arcane sigils, patient wizard's codex voice.
+
+→ [grimoire.yaml](skins/grimoire.yaml)
+
+![grimoire](https://basicscandal.github.io/claude-skins/grimoire.gif)
+
 ## What a Skin Changes
 
 | Layer | What it does |

@@ -34,6 +34,7 @@
       --mission-accent: #FFB000;
       --retro-accent: #7B71D5;
       --brutalist-accent: #FFFFFF;
+      --grimoire-accent: #C9A84C;
     }
 
     body {
@@ -654,6 +655,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Grimoire -->
+      <div class="skin-card reveal" style="--skin-color: var(--grimoire-accent); transition-delay: 0.06s;">
+        <div class="skin-preview">
+          <img src="grimoire.gif" alt="Grimoire skin — dark brown parchment with arcane sigil braille art" loading="lazy">
+          <div class="skin-accent-bar"></div>
+        </div>
+        <div class="skin-info">
+          <h3 class="skin-name">Grimoire</h3>
+          <p class="skin-desc">Dark academia spellbook. Deep brown parchment, golden arcane sigils, patient wizard's codex voice.</p>
+          <div class="skin-meta">
+            <div class="skin-palette">
+              <span class="palette-dot" style="background:#1A120B"></span>
+              <span class="palette-dot" style="background:#7B4B8A"></span>
+              <span class="palette-dot" style="background:#C9A84C"></span>
+              <span class="palette-dot" style="background:#D4C4A8"></span>
+              <span class="palette-dot" style="background:#6B8E23"></span>
+            </div>
+            <span class="skin-command" onclick="event.stopPropagation(); copySkin('grimoire')">/skin grimoire</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -709,7 +732,8 @@
       'The path is clear. Begin.',
       'All systems nominal. Flight is go.',
       'READY. **** CLAUDE 64 BASIC V2 ****',
-      'Ready.'
+      'Ready.',
+      'The codex opens. Speak your incantation.'
     ];
     let phraseIndex = 0;
     let charIndex = 0;
