@@ -2,3 +2,5 @@
 *.swp
 *.swo
 *~
+screenshots/preview.html
+docs/*-opt.gif

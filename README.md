@@ -54,21 +54,21 @@ Offensive security scanner — purple-to-orange gradient, tactical precision.
 
 → [nebula.yaml](skins/nebula.yaml)
 
-![nebula](https://basicscandal.github.io/claude-skins/nebula.png)
+![nebula](https://basicscandal.github.io/claude-skins/nebula.gif)
 
 ### Mythos
 AGI awakening — Greek mythology meets artificial intelligence. Eye of Providence braille art, blue and gold divine palette.
 
 → [mythos.yaml](skins/mythos.yaml)
 
-![mythos](https://basicscandal.github.io/claude-skins/mythos.png)
+![mythos](https://basicscandal.github.io/claude-skins/mythos.gif)
 
 ### Netrunner
 Cyberpunk netrunner — neural interface hacker aesthetic. Cyan ICE-breaking colors on black, skull braille art.
 
 → [netrunner.yaml](skins/netrunner.yaml)
 
-![netrunner](https://basicscandal.github.io/claude-skins/netrunner.png)
+![netrunner](https://basicscandal.github.io/claude-skins/netrunner.gif)
 
 ## What a Skin Changes
 
