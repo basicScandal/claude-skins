@@ -1,0 +1,41 @@
+name: brutalist
+description: "Anti-skin. Pure monochrome, zero decoration, maximum function."
+
+terminal:
+  background: "#000000"
+  foreground: "#FFFFFF"
+  cursor: "#FFFFFF"
+  palette:
+    black: "#000000"
+    red: "#FFFFFF"
+    green: "#FFFFFF"
+    yellow: "#AAAAAA"
+    blue: "#555555"
+    magenta: "#AAAAAA"
+    cyan: "#AAAAAA"
+    white: "#FFFFFF"
+
+statusline:
+  accent: "#FFFFFF"
+  dim: "#333333"
+  bar_fill: "#FFFFFF"
+  bar_empty: "#000000"
+  icon: ">"
+
+branding:
+  banner: |
+    \033[1mBRUTALIST\033[0m
+    \033[0mclaude\033[0m
+  hero: "----------------------------------------------------------------"
+  welcome: "Ready."
+  goodbye: "Done."
+  prompt_prefix: ">"
+
+tools:
+  sounds: false
+  prefix: ""
+  events:
+    file_written: { sound: "", icon: ">" }
+    command_run: { sound: "", icon: ">" }
+    error: { sound: "", icon: "!" }
+    search: { sound: "", icon: ">" }
