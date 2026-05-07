@@ -70,6 +70,41 @@ Cyberpunk netrunner — neural interface hacker aesthetic. Cyan ICE-breaking col
 
 ![netrunner](https://basicscandal.github.io/claude-skins/netrunner.gif)
 
+### Noir
+1940s detective procedural — high-contrast black and cream, amber accents, hardboiled Chandler narration.
+
+→ [noir.yaml](skins/noir.yaml)
+
+![noir](https://basicscandal.github.io/claude-skins/noir.gif)
+
+### Sensei
+Minimalist Japanese ink-wash aesthetic — warm parchment, deep charcoal, vermillion hanko seal accent.
+
+→ [sensei.yaml](skins/sensei.yaml)
+
+![sensei](https://basicscandal.github.io/claude-skins/sensei.gif)
+
+### Mission Control
+NASA retro-futurist ops console — amber phosphor on deep navy, Apollo-era mission control aesthetic.
+
+→ [mission-control.yaml](skins/mission-control.yaml)
+
+![mission-control](https://basicscandal.github.io/claude-skins/mission-control.gif)
+
+### Retro86
+1980s Commodore 64 nostalgia — classic C64 blue palette, 8-bit ASCII art, enthusiastic magazine voice.
+
+→ [retro86.yaml](skins/retro86.yaml)
+
+![retro86](https://basicscandal.github.io/claude-skins/retro86.gif)
+
+### Brutalist
+The anti-skin — pure monochrome, zero decoration, no sounds, maximum terseness.
+
+→ [brutalist.yaml](skins/brutalist.yaml)
+
+![brutalist](https://basicscandal.github.io/claude-skins/brutalist.gif)
+
 ## What a Skin Changes
 
 | Layer | What it does |
