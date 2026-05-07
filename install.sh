@@ -11,19 +11,6 @@ DEST="$HOME/.claude/skins"
 SETTINGS="$HOME/.claude/settings.json"
 SKILL_DIR="$HOME/.claude/skills/skin"
 
-# ── Prerequisites ────────────────────────────────────────────────────────────
-
-if ! python3 -c "import yaml" 2>/dev/null; then
-  echo "Error: Python 3 with PyYAML is required."
-  echo "Install it: pip install pyyaml"
-  exit 1
-fi
-
-if ! python3 -c "import json" 2>/dev/null; then
-  echo "Error: Python 3 with json module is required (should be built-in)."
-  exit 1
-fi
-
 # ── Copy files ───────────────────────────────────────────────────────────────
 
 echo "Installing Claude Skins..."

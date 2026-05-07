@@ -21,11 +21,11 @@ fi
 
 [[ -z "$SKIN_NAME" || "$SKIN_NAME" == "default" ]] && exit 0
 
-# Check sounds enabled
+# Check skin file exists
 SKIN_FILE="$SKINS_DIR/${SKIN_NAME}.yaml"
 [[ ! -f "$SKIN_FILE" ]] && exit 0
 
-# Cache parsed tool events
+# Cache parsed tool events (60s TTL)
 TOOL_CACHE="/tmp/claude-skin-tools-${SKIN_NAME}"
 TOOL_CACHE_AGE=999
 if [[ -f "$TOOL_CACHE" ]]; then
@@ -37,37 +37,27 @@ if [[ -f "$TOOL_CACHE" ]]; then
 fi
 
 if [[ "$TOOL_CACHE_AGE" -gt 60 ]]; then
-  python3 -c "
-import yaml, json
-with open('$SKIN_FILE') as f:
-    d = yaml.safe_load(f)
-tools = d.get('tools', {})
-print(json.dumps({
-    'sounds': tools.get('sounds', False),
-    'events': tools.get('events', {})
-}))
-" > "$TOOL_CACHE" 2>/dev/null || exit 0
+  # shellcheck source=engine/parse-yaml.sh
+  source "$ENGINE_DIR/parse-yaml.sh"
+  {
+    get_yaml_value "$SKIN_FILE" "tools.sounds"
+    # Events: one line per event as "event_name:sound:icon"
+    for evt in file_written command_run error search; do
+      sound=$(get_yaml_event_field "$SKIN_FILE" "$evt" "sound")
+      icon=$(get_yaml_event_field  "$SKIN_FILE" "$evt" "icon")
+      echo "${evt}:${sound}:${icon}"
+    done
+  } > "$TOOL_CACHE" 2>/dev/null || exit 0
 fi
 
 [[ ! -f "$TOOL_CACHE" ]] && exit 0
 
-# Check if sounds enabled
-sounds_enabled=$(python3 -c "
-import json
-with open('$TOOL_CACHE') as f:
-    print(json.load(f).get('sounds', False))
-" 2>/dev/null || echo "False")
-
-[[ "$sounds_enabled" != "True" ]] && exit 0
+# Read cache: first line = sounds enabled, then event lines "event:sound:icon"
+sounds_enabled=$(head -1 "$TOOL_CACHE")
+[[ "$sounds_enabled" != "true" ]] && exit 0
 
 # Map Claude Code tool names to skin event types
-tool_name=$(echo "$input" | python3 -c "
-import sys, json
-try:
-    d = json.load(sys.stdin)
-    print(d.get('tool_name', d.get('tool', '')))
-except: print('')
-" 2>/dev/null || echo "")
+tool_name=$(echo "$input" | jq -r '.tool_name // .tool // ""' 2>/dev/null || echo "")
 
 # Map tool to event type
 event=""
@@ -78,14 +68,17 @@ case "$tool_name" in
   *) exit 0 ;;
 esac
 
-# Get sound for this event
-sound=$(python3 -c "
-import json
-with open('$TOOL_CACHE') as f:
-    events = json.load(f).get('events', {})
-evt = events.get('$event', {})
-print(evt.get('sound', ''))
-" 2>/dev/null || echo "")
+# Look up sound for this event from cache (grep the event:sound:icon line)
+sound=""
+while IFS= read -r line; do
+  [[ $((++_line_no)) -eq 1 ]] && continue   # skip sounds_enabled line
+  if [[ "${line%%:*}" == "$event" ]]; then
+    rest="${line#*:}"
+    sound="${rest%%:*}"
+    break
+  fi
+done < "$TOOL_CACHE"
+unset _line_no
 
 # Play sound (async, non-blocking, cross-platform)
 if [[ -n "$sound" ]]; then

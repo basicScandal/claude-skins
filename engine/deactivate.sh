@@ -8,6 +8,10 @@ ENGINE_DIR="$HOME/.claude/skins/engine"
 RESTORE_FILE="/tmp/claude-skin-restore"
 OUTPUT_STYLES_DIR="$HOME/.claude/output-styles"
 
+# Load pure-bash YAML parser
+# shellcheck source=engine/parse-yaml.sh
+source "$ENGINE_DIR/parse-yaml.sh"
+
 # Print goodbye message from current skin
 current_skin=""
 if [[ -f "$ENGINE_DIR/current" ]]; then
@@ -17,11 +21,7 @@ fi
 if [[ -n "$current_skin" && "$current_skin" != "default" ]]; then
   skin_file="$HOME/.claude/skins/${current_skin}.yaml"
   if [[ -f "$skin_file" ]]; then
-    goodbye=$(python3 -c "
-import yaml
-with open('$skin_file') as f:
-    data = yaml.safe_load(f)
-print(data.get('branding', {}).get('goodbye', ''))" 2>/dev/null || echo "")
+    goodbye=$(get_yaml_value "$skin_file" "branding.goodbye")
     if [[ -n "$goodbye" ]]; then
       echo -e "\033[2m$goodbye\033[0m"
     fi

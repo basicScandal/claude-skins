@@ -6,16 +6,14 @@
 ENGINE_DIR="$HOME/.claude/skins/engine"
 SKINS_DIR="$HOME/.claude/skins"
 
+# Load pure-bash YAML parser
+# shellcheck source=engine/parse-yaml.sh
+source "$ENGINE_DIR/parse-yaml.sh"
+
 input=$(cat)
 
-# Extract the user's message
-message=$(echo "$input" | python3 -c "
-import sys, json
-try:
-    d = json.load(sys.stdin)
-    print(d.get('prompt', d.get('message', '')))
-except: print('')
-" 2>/dev/null || echo "")
+# Extract the user's message using jq (already a dependency via statusline)
+message=$(echo "$input" | jq -r '.prompt // .message // ""' 2>/dev/null || echo "")
 
 # Only handle /skin commands
 [[ ! "$message" =~ ^/skin ]] && exit 0
@@ -32,11 +30,7 @@ case "$args" in
     for f in "$SKINS_DIR"/*.yaml; do
       name=$(basename "$f" .yaml)
       [[ "$name" == "default" ]] && continue
-      desc=$(python3 -c "
-import yaml
-with open('$f') as fh:
-    print(yaml.safe_load(fh).get('description', ''))
-" 2>/dev/null || echo "")
+      desc=$(get_yaml_value "$f" "description")
       if [[ "$name" == "$current" ]]; then
         echo "  → $name — $desc"
       else
@@ -53,14 +47,28 @@ with open('$f') as fh:
     ;;
   default)
     current=$(cat "$ENGINE_DIR/current" 2>/dev/null || echo "default")
-    python3 -c "
-import yaml
-with open('$ENGINE_DIR/config.yaml') as f:
-    d = yaml.safe_load(f)
-d['default_skin'] = '$current'
-with open('$ENGINE_DIR/config.yaml', 'w') as f:
-    yaml.dump(d, f, default_flow_style=False)
-"
+    config_file="$ENGINE_DIR/config.yaml"
+    # Update or create the default_skin key.
+    # config.yaml is a minimal single-key file: "default_skin: value"
+    if [[ -f "$config_file" ]]; then
+      # Replace existing default_skin line, or append if not present
+      if grep -q "^default_skin:" "$config_file"; then
+        # Use a temp file for in-place edit without sed -i (portability)
+        tmp=$(mktemp)
+        while IFS= read -r line; do
+          if [[ "$line" =~ ^default_skin: ]]; then
+            echo "default_skin: $current"
+          else
+            echo "$line"
+          fi
+        done < "$config_file" > "$tmp"
+        mv "$tmp" "$config_file"
+      else
+        echo "default_skin: $current" >> "$config_file"
+      fi
+    else
+      echo "default_skin: $current" > "$config_file"
+    fi
     echo "Default skin set to: $current"
     exit 2
     ;;

@@ -55,7 +55,7 @@ ICON=">"
 
 SKIN_FILE="$SKINS_DIR/${SKIN_NAME}.yaml"
 if [[ -f "$SKIN_FILE" && "$SKIN_NAME" != "default" ]]; then
-  # Parse skin colors with Python (cached)
+  # Parse skin colors with bash (cached for 60s)
   SKIN_CACHE="/tmp/claude-skin-colors-${SKIN_NAME}"
   SKIN_CACHE_AGE=999
   if [[ -f "$SKIN_CACHE" ]]; then
@@ -67,17 +67,16 @@ if [[ -f "$SKIN_FILE" && "$SKIN_NAME" != "default" ]]; then
   fi
 
   if [[ "$SKIN_CACHE_AGE" -gt 60 ]]; then
-    python3 -c "
-import yaml
-with open('$SKIN_FILE') as f:
-    d = yaml.safe_load(f)
-sl = d.get('statusline', {})
-print(sl.get('accent', '#FFBF00').lstrip('#'))
-print(sl.get('dim', '#666666').lstrip('#'))
-print(sl.get('bar_fill', '#FFBF00').lstrip('#'))
-print(sl.get('bar_empty', '#333333').lstrip('#'))
-print(sl.get('icon', '>'))
-" > "$SKIN_CACHE" 2>/dev/null || true
+    # Source the parser and write cache
+    # shellcheck source=engine/parse-yaml.sh
+    source "$ENGINE_DIR/parse-yaml.sh"
+    {
+      get_yaml_value "$SKIN_FILE" "statusline.accent"  | tr -d '#'
+      get_yaml_value "$SKIN_FILE" "statusline.dim"     | tr -d '#'
+      get_yaml_value "$SKIN_FILE" "statusline.bar_fill"  | tr -d '#'
+      get_yaml_value "$SKIN_FILE" "statusline.bar_empty" | tr -d '#'
+      get_yaml_value "$SKIN_FILE" "statusline.icon"
+    } > "$SKIN_CACHE" 2>/dev/null || true
   fi
 
   if [[ -f "$SKIN_CACHE" ]]; then
