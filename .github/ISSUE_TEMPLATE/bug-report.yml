@@ -1,0 +1,45 @@
+name: Bug Report
+description: Report something not working correctly
+labels: ["bug"]
+body:
+  - type: input
+    id: skin
+    attributes:
+      label: Skin
+      description: Which skin were you using?
+      placeholder: "nebula"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal
+      description: "Which terminal emulator are you using?"
+      placeholder: "iTerm2 3.5, Ghostty 1.1, etc."
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: "macOS 15.2, Ubuntu 24.04, etc."
+    validations:
+      required: true

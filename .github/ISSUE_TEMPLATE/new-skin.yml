@@ -1,0 +1,64 @@
+name: New Skin Submission
+description: Submit a new skin for Claude Code
+title: "[Skin] "
+labels: ["new-skin"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Skin name
+      description: Lowercase, no spaces (will be the filename)
+      placeholder: "e.g. vaporwave"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: One-line description of the theme
+      placeholder: "Retro 80s aesthetic with pink and purple neons"
+    validations:
+      required: true
+
+  - type: textarea
+    id: colors
+    attributes:
+      label: Color palette
+      description: "List your terminal colors (background, foreground, cursor, and ANSI palette)"
+      placeholder: |
+        background: #1a0030
+        foreground: #ff71ce
+        cursor: #01cdfe
+        palette:
+          black: #1a0030
+          red: #ff6b9d
+          ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: banner
+    attributes:
+      label: Banner art
+      description: "ASCII/braille art for the startup banner (80 columns max)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: "Attach a screenshot of the skin active in your terminal"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: personality
+    attributes:
+      label: Includes personality file?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
