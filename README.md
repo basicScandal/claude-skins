@@ -189,9 +189,12 @@ See [SCHEMA.md](SCHEMA.md) for the full reference and [CONTRIBUTING.md](CONTRIBU
 ## Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
-- Python 3 with PyYAML (`pip install pyyaml`)
-- Terminal with OSC sequence support (iTerm2, Kitty, WezTerm, Ghostty, Terminal.app)
-- macOS for tool sounds (silently skipped on Linux)
+- Terminal with OSC sequence support (iTerm2, Kitty, WezTerm, Ghostty, Alacritty, Windows Terminal, Terminal.app)
+- Tool sounds work on macOS, Linux (PulseAudio/ALSA), and WSL — see [COMPATIBILITY.md](COMPATIBILITY.md)
+
+## Using a Skin? Let Us Know
+
+If you're using claude-skins, we'd love to hear about it! Open a [Discussion](https://github.com/basicScandal/claude-skins/discussions) or tag the repo in your dotfiles.
 
 ## License
 
