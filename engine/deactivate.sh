@@ -28,24 +28,32 @@ if [[ -n "$current_skin" && "$current_skin" != "default" ]]; then
   fi
 fi
 
-# Restore terminal colors via /dev/tty
-if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
-  {
-    printf '\033]110\007'   # reset foreground
-    printf '\033]111\007'   # reset background
-    printf '\033]112\007'   # reset cursor
-    # Reset ANSI palette
-    for i in {0..7}; do
-      printf '\033]104;%d\007' "$i"
-    done
-    # Reset terminal title
-    printf '\033]0;\007'
-  } > /dev/tty 2>/dev/null || true
+# Restore terminal colors via AppleScript
+if [[ -f "$RESTORE_FILE" ]]; then
+  osascript 2>/dev/null <<'APPLESCRIPT' || true
+tell application "iTerm2"
+  tell current session of current window
+    set background color to {0, 0, 0}
+    set foreground color to {65535, 65535, 65535}
+    set cursor color to {65535, 65535, 65535}
+    set ansi black color to {0, 0, 0}
+    set ansi red color to {52428, 0, 0}
+    set ansi green color to {0, 52428, 0}
+    set ansi yellow color to {52428, 52428, 0}
+    set ansi blue color to {0, 0, 52428}
+    set ansi magenta color to {52428, 0, 52428}
+    set ansi cyan color to {0, 52428, 52428}
+    set ansi white color to {52428, 52428, 52428}
+  end tell
+end tell
+APPLESCRIPT
   rm -f "$RESTORE_FILE"
 fi
 
 # Remove skin personality symlinks
 find "$OUTPUT_STYLES_DIR" -name "skin-*.md" -type l -delete 2>/dev/null || true
 
-# Reset current skin
-echo "default" > "$ENGINE_DIR/current"
+# Only clear skin state on explicit reset (not on normal session end)
+if [[ "${1:-}" == "--reset" ]]; then
+  echo "default" > "$ENGINE_DIR/current"
+fi
