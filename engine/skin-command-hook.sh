@@ -41,7 +41,7 @@ case "$args" in
     exit 2
     ;;
   reset)
-    "$ENGINE_DIR/deactivate.sh"
+    "$ENGINE_DIR/deactivate.sh" --reset
     echo "Skin deactivated. Terminal restored."
     exit 2
     ;;
