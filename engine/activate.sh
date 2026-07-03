@@ -54,28 +54,41 @@ yblock() {
 # --- Save terminal state marker for restore ---
 echo "reset" > "$RESTORE_FILE"
 
-# --- Apply terminal colors via /dev/tty (reaches actual terminal) ---
+# --- Apply terminal colors via AppleScript (bypasses PTY, works from Claude Code hooks) ---
+# Claude Code hook subprocesses have no TTY; OSC sequences via stdout are also intercepted
+# and stripped by Claude Code's TUI renderer. osascript communicates via Apple Events
+# directly to iTerm2, bypassing the PTY entirely.
+hex_to_16bit() {
+  local hex="${1#\#}"
+  local r=$((16#${hex:0:2} * 257))
+  local g=$((16#${hex:2:2} * 257))
+  local b=$((16#${hex:4:2} * 257))
+  echo "$r, $g, $b"
+}
+
+iterm_set_color() {
+  local property="$1"
+  local hex="$2"
+  [[ -z "$hex" ]] && return
+  local rgb
+  rgb=$(hex_to_16bit "$hex")
+  osascript -e "tell application \"iTerm2\" to tell current session of current window to set $property to {$rgb}" 2>/dev/null || true
+}
+
 bg=$(yval "terminal.background")
 fg=$(yval "terminal.foreground")
 cursor=$(yval "terminal.cursor")
 
-if [[ -e /dev/tty ]]; then
-  {
-    [[ -n "$bg" ]] && printf '\033]11;%s\007' "$bg"
-    [[ -n "$fg" ]] && printf '\033]10;%s\007' "$fg"
-    [[ -n "$cursor" ]] && printf '\033]12;%s\007' "$cursor"
+iterm_set_color "background color" "$bg"
+iterm_set_color "foreground color" "$fg"
+iterm_set_color "cursor color" "$cursor"
 
-    # Apply palette colors (ANSI 0-7)
-    palette_colors=("black" "red" "green" "yellow" "blue" "magenta" "cyan" "white")
-    for i in "${!palette_colors[@]}"; do
-      color=$(get_yaml_value "$skin_file" "terminal.palette.${palette_colors[$i]}")
-      [[ -n "$color" ]] && printf '\033]4;%d;%s\007' "$i" "$color"
-    done
-
-    # Set terminal title
-    printf '\033]0;Claude ◆ %s\007' "$skin_name"
-  } > /dev/tty 2>/dev/null || true
-fi
+palette_names=("black" "red" "green" "yellow" "blue" "magenta" "cyan" "white")
+ansi_properties=("ansi black color" "ansi red color" "ansi green color" "ansi yellow color" "ansi blue color" "ansi magenta color" "ansi cyan color" "ansi white color")
+for i in "${!palette_names[@]}"; do
+  color=$(get_yaml_value "$skin_file" "terminal.palette.${palette_names[$i]}")
+  iterm_set_color "${ansi_properties[$i]}" "$color"
+done
 
 # --- Write active skin ---
 echo "$skin_name" > "$ENGINE_DIR/current"
