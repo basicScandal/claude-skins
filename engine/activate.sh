@@ -77,6 +77,42 @@ if [[ -e /dev/tty ]]; then
   } > /dev/tty 2>/dev/null || true
 fi
 
+# --- Apply terminal colors for Ghostty via AppleScript (Apple Events) ---
+# Claude Code (v2.1.139+) runs hook/tool subprocesses with no controlling
+# terminal, so OSC sequences via /dev/tty and via stdout are both dropped.
+# Ghostty is AppleScript-scriptable: write the palette into its config and
+# trigger an out-of-band reload, which needs no TTY. No-op on other terminals.
+if [[ "$(uname)" == "Darwin" ]] && { [[ "${TERM_PROGRAM:-}" == "ghostty" ]] || [[ -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; }; then
+  ghostty_config="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config"
+  mkdir -p "$(dirname "$ghostty_config")"
+
+  # Rebuild our managed block, preserving any user config outside the markers
+  gtmp=$(mktemp)
+  if [[ -f "$ghostty_config" ]]; then
+    awk '
+      /^# >>> claude-skins/ {skip=1}
+      skip==0 {print}
+      /^# <<< claude-skins/ {skip=0; next}
+    ' "$ghostty_config" > "$gtmp"
+  fi
+  {
+    echo "# >>> claude-skins (managed) — overwritten on skin switch; delete file to reset"
+    [[ -n "$bg" ]]     && echo "background = $bg"
+    [[ -n "$fg" ]]     && echo "foreground = $fg"
+    [[ -n "$cursor" ]] && echo "cursor-color = $cursor"
+    g_palette=("black" "red" "green" "yellow" "blue" "magenta" "cyan" "white")
+    for i in "${!g_palette[@]}"; do
+      color=$(get_yaml_value "$skin_file" "terminal.palette.${g_palette[$i]}")
+      [[ -n "$color" ]] && echo "palette = ${i}=${color}"
+    done
+    echo "# <<< claude-skins (managed)"
+  } >> "$gtmp"
+  mv "$gtmp" "$ghostty_config"
+
+  # Live reload, out-of-band (works without a TTY); silent on any failure
+  osascript -e 'tell application "Ghostty" to perform action "reload_config" on (terminal 1 of front window)' >/dev/null 2>&1 || true
+fi
+
 # --- Write active skin ---
 echo "$skin_name" > "$ENGINE_DIR/current"
 
