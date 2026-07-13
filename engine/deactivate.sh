@@ -44,6 +44,26 @@ if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
   rm -f "$RESTORE_FILE"
 fi
 
+# Restore Ghostty by removing our managed block and reloading (out-of-band)
+if [[ "$(uname)" == "Darwin" ]] && { [[ "${TERM_PROGRAM:-}" == "ghostty" ]] || [[ -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; }; then
+  ghostty_config="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config"
+  if [[ -f "$ghostty_config" ]]; then
+    gtmp=$(mktemp)
+    awk '
+      /^# >>> claude-skins/ {skip=1}
+      skip==0 {print}
+      /^# <<< claude-skins/ {skip=0; next}
+    ' "$ghostty_config" > "$gtmp"
+    # If only our block was present, remove the file so Ghostty reverts fully
+    if grep -q '[^[:space:]]' "$gtmp"; then
+      mv "$gtmp" "$ghostty_config"
+    else
+      rm -f "$gtmp" "$ghostty_config"
+    fi
+    osascript -e 'tell application "Ghostty" to perform action "reload_config" on (terminal 1 of front window)' >/dev/null 2>&1 || true
+  fi
+fi
+
 # Remove skin personality symlinks
 find "$OUTPUT_STYLES_DIR" -name "skin-*.md" -type l -delete 2>/dev/null || true
 
