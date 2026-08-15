@@ -1,3 +1,5 @@
+
+
 # Claude Skins
 
 Custom skins (visual themes) for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI.
@@ -120,7 +122,7 @@ Dark academia spellbook — deep brown parchment, golden arcane sigils, patient 
 | **ASCII banner** | Braille art + block letter logo displayed on session start |
 | **Status line** | Themed colors, icon, and progress bar in the Claude Code status bar |
 | **Personality** | Output style that shapes Claude's voice (oracular, hacker, tactical) |
-| **Tool sounds** | macOS system sounds triggered on file writes, commands, errors |
+| **Tool sounds** | System sounds triggered on file writes, commands, errors |
 
 ## Commands
 
