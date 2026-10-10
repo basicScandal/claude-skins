@@ -24,6 +24,14 @@ cp "$SCRIPT_DIR/engine/"*.sh "$DEST/engine/"
 chmod +x "$DEST/engine/"*.sh
 echo "  Copied engine scripts"
 
+# PowerShell twins live next to the bash scripts. install.sh still wires the
+# bash hooks; install.ps1 is what points Claude Code at the .ps1 files.
+if compgen -G "$SCRIPT_DIR/engine/*.ps1" > /dev/null; then
+  cp "$SCRIPT_DIR/engine/"*.ps1 "$DEST/engine/"
+  cp "$SCRIPT_DIR/engine/"*.cmd "$DEST/engine/" 2>/dev/null || true
+  echo "  Copied PowerShell engine scripts"
+fi
+
 cp "$SCRIPT_DIR/personalities/"*.md "$DEST/personalities/"
 echo "  Copied personality files"
 
@@ -52,8 +60,13 @@ if [[ ! -f "$SETTINGS" ]]; then
 fi
 
 # Back up settings.json
-cp "$SETTINGS" "${SETTINGS}.backup"
-echo "  Backed up settings.json to settings.json.backup"
+# Keep the first backup: a reinstall must not replace the pre-skins settings.
+if [[ ! -f "${SETTINGS}.backup" ]]; then
+  cp "$SETTINGS" "${SETTINGS}.backup"
+  echo "  Backed up settings.json to settings.json.backup"
+else
+  echo "  settings.json.backup already exists -- kept it"
+fi
 
 # Use Python to idempotently merge all required hooks and statusLine
 python3 << PYEOF
@@ -129,7 +142,12 @@ else:
 
 existing_sl = cfg.get("statusLine", {})
 existing_cmd = existing_sl.get("command", "") if isinstance(existing_sl, dict) else ""
-if "skins/engine/statusline.sh" not in existing_cmd:
+ours = any(f in existing_cmd.replace(chr(92), "/") for f in ("skins/engine/statusline.", "skins/engine/run-engine.cmd"))
+if existing_cmd and not ours:
+    # Never replace a status line the user set up themselves.
+    print("    statusLine is a custom command -- left unchanged")
+    print(f"    To use the skin status line, set statusLine.command to {skins_engine}/statusline.sh")
+elif "skins/engine/statusline.sh" not in existing_cmd:
     cfg["statusLine"] = {
         "type": "command",
         "command": f"{skins_engine}/statusline.sh"

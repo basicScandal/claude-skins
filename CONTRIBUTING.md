@@ -8,7 +8,7 @@ Want to add a skin? Great. Here's how.
 2. Set `name:` to match the filename (without `.yaml`)
 3. Customize the keys you want — missing values inherit from `default.yaml`
 4. Optionally create a matching `personalities/<your-skin-name>.md` for Claude's voice
-5. Test it: `./engine/activate.sh your-skin-name`
+5. Test it: `./engine/activate.sh your-skin-name` after the engine is installed under `~/.claude/skins/` (both the repo script and the installed script read `$HOME/.claude/skins`). On Windows: `pwsh -NoProfile -ExecutionPolicy Bypass -File .\engine\activate.ps1 your-skin-name` with the same install layout under `$env:USERPROFILE\.claude\skins`.
 
 ## Guidelines
 

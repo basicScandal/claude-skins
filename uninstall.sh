@@ -43,7 +43,18 @@ SKIN_FRAGMENTS = [
     "skins/engine/activate.sh",
     "skins/engine/deactivate.sh",
     "skins/engine/skin-tool-hook.sh",
+    "skins/engine/activate.ps1",
+    "skins/engine/deactivate.ps1",
+    "skins/engine/skin-tool-hook.ps1",
+    "skins/engine/run-engine.cmd",
 ]
+
+def hook_text(hook):
+    parts = [str(hook.get("command", "") or "")]
+    args = hook.get("args") or []
+    if isinstance(args, list):
+        parts.extend(str(arg) for arg in args)
+    return " ".join(parts).replace("\\", "/")
 
 changed = False
 
@@ -53,7 +64,7 @@ for event, entries in list(cfg.get("hooks", {}).items()):
     for entry in entries:
         new_hooks = [
             h for h in entry.get("hooks", [])
-            if not any(frag in h.get("command", "") for frag in SKIN_FRAGMENTS)
+            if not any(frag in hook_text(h) for frag in SKIN_FRAGMENTS)
         ]
         if len(new_hooks) != len(entry.get("hooks", [])):
             changed = True
@@ -67,7 +78,13 @@ for event, entries in list(cfg.get("hooks", {}).items()):
 
 # Remove statusLine if it points to skins
 sl = cfg.get("statusLine", {})
-if isinstance(sl, dict) and "skins/engine/statusline.sh" in sl.get("command", ""):
+status_command = sl.get("command", "") if isinstance(sl, dict) else ""
+status_command = status_command.replace("\\", "/")
+if isinstance(sl, dict) and (
+    "skins/engine/statusline.sh" in status_command
+    or "skins/engine/statusline.ps1" in status_command
+    or "skins/engine/run-engine.cmd" in status_command
+):
     del cfg["statusLine"]
     changed = True
     print("  Removed statusLine configuration")
@@ -81,6 +98,20 @@ else:
     print("  No skin hooks found in settings.json — nothing to remove")
 
 PYEOF
+fi
+
+# ── Remove personality links created by either engine ────────────────────────
+
+MANIFEST="$HOME/.claude/skins/engine/personality-manifest.txt"
+if [[ -f "$MANIFEST" ]]; then
+  while IFS= read -r dest || [[ -n "$dest" ]]; do
+    if [[ -n "$dest" && -e "$dest" ]]; then
+      rm -f "$dest"
+    fi
+  done < "$MANIFEST"
+fi
+if [[ -d "$HOME/.claude/output-styles" ]]; then
+  find "$HOME/.claude/output-styles" -name "skin-*.md" -type l -delete 2>/dev/null || true
 fi
 
 # ── Remove skins directory ───────────────────────────────────────────────────

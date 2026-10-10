@@ -36,7 +36,7 @@ Controls terminal colors via OSC escape sequences. Applied to the actual termina
 
 ## Status Line (5 keys)
 
-Color tokens consumed by the shared `statusline.sh` script.
+Color tokens consumed by `engine/statusline.sh` and `engine/statusline.ps1`.
 
 | Key | What it colors | Example |
 |-----|----------------|---------|
