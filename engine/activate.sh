@@ -12,6 +12,8 @@ RESTORE_FILE="/tmp/claude-skin-restore"
 # Load pure-bash YAML parser
 # shellcheck source=engine/parse-yaml.sh
 source "$ENGINE_DIR/parse-yaml.sh"
+# shellcheck source=engine/find-tty.sh
+source "$ENGINE_DIR/find-tty.sh"
 
 skin_name="${1:-}"
 
@@ -54,12 +56,13 @@ yblock() {
 # --- Save terminal state marker for restore ---
 echo "reset" > "$RESTORE_FILE"
 
-# --- Apply terminal colors via /dev/tty (reaches actual terminal) ---
+# --- Apply terminal colors via the real terminal (see find-tty.sh) ---
 bg=$(yval "terminal.background")
 fg=$(yval "terminal.foreground")
 cursor=$(yval "terminal.cursor")
 
-if [[ -e /dev/tty ]]; then
+skin_tty=$(find_skin_tty)
+if [[ -n "$skin_tty" ]]; then
   {
     [[ -n "$bg" ]] && printf '\033]11;%s\007' "$bg"
     [[ -n "$fg" ]] && printf '\033]10;%s\007' "$fg"
@@ -74,7 +77,7 @@ if [[ -e /dev/tty ]]; then
 
     # Set terminal title
     printf '\033]0;Claude ◆ %s\007' "$skin_name"
-  } > /dev/tty 2>/dev/null || true
+  } 2>/dev/null > "$skin_tty" || true
 fi
 
 # --- Write active skin ---
@@ -84,8 +87,13 @@ echo "$skin_name" > "$ENGINE_DIR/current"
 personality_file="$SKINS_DIR/personalities/${skin_name}.md"
 output_styles_dir="$HOME/.claude/output-styles"
 mkdir -p "$output_styles_dir"
-# Remove old skin symlinks
-find "$output_styles_dir" -name "skin-*.md" -type l -delete 2>/dev/null || true
+# Remove old skin personalities. Under Git Bash `ln -s` copies instead of
+# linking, so also match plain files named after a bundled personality.
+for f in "$output_styles_dir"/skin-*.md; do
+  if [[ -L "$f" || -f "$SKINS_DIR/personalities/${f##*/skin-}" ]]; then
+    rm -f "$f"
+  fi
+done
 if [[ -f "$personality_file" ]]; then
   ln -sf "$personality_file" "$output_styles_dir/skin-${skin_name}.md"
 fi

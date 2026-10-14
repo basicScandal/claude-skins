@@ -83,6 +83,7 @@ get_yaml_value() {
   local in_block=0           # are we inside a block scalar we're skipping?
 
   while IFS= read -r line; do
+    line="${line%$'\r'}"   # tolerate CRLF files (e.g. git autocrlf on Windows)
     # Skip comment-only lines
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
 
@@ -232,6 +233,7 @@ get_yaml_block() {
   local result=""
 
   while IFS= read -r line; do
+    line="${line%$'\r'}"   # tolerate CRLF files (e.g. git autocrlf on Windows)
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
 
     local raw_indent="${line%%[^ ]*}"
@@ -373,6 +375,7 @@ get_yaml_event_field() {
   local in_events=0
 
   while IFS= read -r line; do
+    line="${line%$'\r'}"   # tolerate CRLF files (e.g. git autocrlf on Windows)
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
 
     local raw_indent="${line%%[^ ]*}"

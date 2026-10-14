@@ -11,6 +11,8 @@ OUTPUT_STYLES_DIR="$HOME/.claude/output-styles"
 # Load pure-bash YAML parser
 # shellcheck source=engine/parse-yaml.sh
 source "$ENGINE_DIR/parse-yaml.sh"
+# shellcheck source=engine/find-tty.sh
+source "$ENGINE_DIR/find-tty.sh"
 
 # Print goodbye message from current skin
 current_skin=""
@@ -28,8 +30,10 @@ if [[ -n "$current_skin" && "$current_skin" != "default" ]]; then
   fi
 fi
 
-# Restore terminal colors via /dev/tty
-if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
+# Restore terminal colors via the real terminal (see find-tty.sh)
+skin_tty=""
+[[ -f "$RESTORE_FILE" ]] && skin_tty=$(find_skin_tty)
+if [[ -n "$skin_tty" ]]; then
   {
     printf '\033]110\007'   # reset foreground
     printf '\033]111\007'   # reset background
@@ -40,12 +44,16 @@ if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
     done
     # Reset terminal title
     printf '\033]0;\007'
-  } > /dev/tty 2>/dev/null || true
+  } 2>/dev/null > "$skin_tty" || true
   rm -f "$RESTORE_FILE"
 fi
 
-# Remove skin personality symlinks
-find "$OUTPUT_STYLES_DIR" -name "skin-*.md" -type l -delete 2>/dev/null || true
+# Remove skin personalities (symlinks, or copies under Git Bash — see activate.sh)
+for f in "$OUTPUT_STYLES_DIR"/skin-*.md; do
+  if [[ -L "$f" || -f "$HOME/.claude/skins/personalities/${f##*/skin-}" ]]; then
+    rm -f "$f"
+  fi
+done
 
 # Reset current skin
 echo "default" > "$ENGINE_DIR/current"
