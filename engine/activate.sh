@@ -12,6 +12,8 @@ RESTORE_FILE="/tmp/claude-skin-restore"
 # Load pure-bash YAML parser
 # shellcheck source=engine/parse-yaml.sh
 source "$ENGINE_DIR/parse-yaml.sh"
+# shellcheck source=engine/tty.sh
+source "$ENGINE_DIR/tty.sh"
 
 skin_name="${1:-}"
 
@@ -54,12 +56,12 @@ yblock() {
 # --- Save terminal state marker for restore ---
 echo "reset" > "$RESTORE_FILE"
 
-# --- Apply terminal colors via /dev/tty (reaches actual terminal) ---
+# --- Apply terminal colors via the controlling terminal (reaches actual terminal) ---
 bg=$(yval "terminal.background")
 fg=$(yval "terminal.foreground")
 cursor=$(yval "terminal.cursor")
 
-if [[ -e /dev/tty ]]; then
+if tty_dev=$(find_tty); then
   {
     [[ -n "$bg" ]] && printf '\033]11;%s\007' "$bg"
     [[ -n "$fg" ]] && printf '\033]10;%s\007' "$fg"
@@ -74,7 +76,7 @@ if [[ -e /dev/tty ]]; then
 
     # Set terminal title
     printf '\033]0;Claude ◆ %s\007' "$skin_name"
-  } > /dev/tty 2>/dev/null || true
+  } > "$tty_dev" 2>/dev/null || true
 fi
 
 # --- Write active skin ---

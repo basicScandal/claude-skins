@@ -11,6 +11,8 @@ OUTPUT_STYLES_DIR="$HOME/.claude/output-styles"
 # Load pure-bash YAML parser
 # shellcheck source=engine/parse-yaml.sh
 source "$ENGINE_DIR/parse-yaml.sh"
+# shellcheck source=engine/tty.sh
+source "$ENGINE_DIR/tty.sh"
 
 # Print goodbye message from current skin
 current_skin=""
@@ -28,8 +30,8 @@ if [[ -n "$current_skin" && "$current_skin" != "default" ]]; then
   fi
 fi
 
-# Restore terminal colors via /dev/tty
-if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
+# Restore terminal colors via the controlling terminal
+if [[ -f "$RESTORE_FILE" ]] && tty_dev=$(find_tty); then
   {
     printf '\033]110\007'   # reset foreground
     printf '\033]111\007'   # reset background
@@ -40,7 +42,7 @@ if [[ -f "$RESTORE_FILE" && -e /dev/tty ]]; then
     done
     # Reset terminal title
     printf '\033]0;\007'
-  } > /dev/tty 2>/dev/null || true
+  } > "$tty_dev" 2>/dev/null || true
   rm -f "$RESTORE_FILE"
 fi
 
